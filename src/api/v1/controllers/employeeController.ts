@@ -35,3 +35,19 @@ export const getEmployeeById = async (req: Request, res: Response): Promise<void
     res.status(500).json({ message: "Error fetching employee", error });
   }
 };
+
+export const updateEmployee = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const employeeId = parseInt(req.params.id);
+    const updatedData: Partial<Employee> = req.body;
+    const updatedEmployee = await employeeService.updateEmployee(employeeId, updatedData);
+    if (updatedEmployee) {
+      res.status(200).json(updatedEmployee);
+    } else {
+      res.status(404).json({ message: "Employee not found" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error updating employee", error: error.message });
+  }
+};
