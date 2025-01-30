@@ -1,5 +1,5 @@
 import {Router} from "express";
-import { createEmployee, getAllEmployees, getEmployeeById, updateEmployee } from "../controllers/employeeController";
+import { createEmployee, getAllEmployees, getEmployeeById, updateEmployee, deleteEmployee } from "../controllers/employeeController";
 
 const router = Router();
 
@@ -124,5 +124,28 @@ router.get("/:id", getEmployeeById); // Get employee by ID
  *         description: Internal server error
  */
 router.put("/:id", updateEmployee); // Update employee
+
+/**
+ * @swagger
+ * /api/v1/employees/{id}:
+ *   delete:
+ *     summary: Delete an employee
+ *     description: Deletes the employee with the specified ID.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: Employee ID
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Employee deleted successfully
+ *       404:
+ *         description: Employee not found
+ *       500:
+ *         description: Internal server error
+ */
+router.delete("/:id", deleteEmployee); // Delete employee
 
 export default router;
