@@ -2,42 +2,46 @@ import express from "express";
 import morgan from "morgan";
 import swaggerUi from "swagger-ui-express";
 import swaggerJsdoc from "swagger-jsdoc";
-import healthRoutes from "./api/v1/routes/health"; // Import health route
+import employeeRoutes from "./api/v1/routes/employeeRoutes";
 
 const app = express();
 
-// Use Morgan for HTTP request logging
+app.use(express.json());
 app.use(morgan("combined"));
 
 // Swagger setup
 const options = {
   definition: {
-    openapi: "3.0.0", 
+    openapi: "3.0.0",
     info: {
-      title: "API Documentation",
+      title: "Employee Directory API",
       version: "1.0.0",
-      description: "A simple Express API documentation",
+      description: "API for managing employee data",
     },
     servers: [
       {
-        url: "http://localhost:3000", // Base URL for your API
+        url: "http://localhost:3000",
       },
     ],
   },
-  apis: ["./src/api/v1/routes/*.ts"], // Path to your route files for API documentation
+  apis: ["./src/api/v1/routes/*.ts"],
 };
 
 const swaggerSpec = swaggerJsdoc(options);
 
-// Serve Swagger UI
+// Swagger UI setup
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// Use the health routes
-app.use("/api/v1", healthRoutes);  // Use the health routes
+// Employee Routes
+app.use("/api/v1/employees", employeeRoutes);
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+// Health check route
+app.get("/health", (req, res) => {
+  res.send("Server is healthy");
 });
+
+// Starting the server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
 
 export default app;
