@@ -33,5 +33,14 @@ describe("Employee CRUD Operations", () => {
       expect(response.body).toHaveProperty("id", createdEmployeeId);
     });
 
+    it("should update an employee", async () => {
+      const response = await request(app)
+        .put(`/api/v1/employees/${createdEmployeeId}`)
+        .send({ position: "Senior Developer" });
+  
+      expect(response.status).toBe(200);
+      expect(response.body.position).toBe("Senior Developer");
+    });
+
   });
       
