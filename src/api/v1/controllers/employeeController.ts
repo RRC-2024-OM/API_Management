@@ -21,3 +21,17 @@ export const getAllEmployees = async (req: Request, res: Response): Promise<void
     res.status(500).json({ message: "Error fetching employees", error: error.message });
   }
 };
+
+export const getEmployeeById = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const employeeId = parseInt(req.params.id);
+    const employee = await employeeService.getEmployeeById(employeeId);
+    if (employee) {
+      res.status(200).json(employee);
+    } else {
+      res.status(404).json({ message: "Employee not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching employee", error });
+  }
+};
