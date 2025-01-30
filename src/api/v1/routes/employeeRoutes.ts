@@ -1,5 +1,5 @@
 import {Router} from "express";
-import { createEmployee, getAllEmployees } from "../controllers/employeeController";
+import { createEmployee, getAllEmployees, getEmployeeById } from "../controllers/employeeController";
 
 const router = Router();
 
@@ -56,5 +56,31 @@ router.post("/", createEmployee); // Create employee
  */
 router.get("/", getAllEmployees); // Get all employees
 
+/**
+ * @swagger
+ * /api/v1/employees/{id}:
+ *   get:
+ *     summary: Get employee by ID
+ *     description: Returns the employee with the specified ID.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: Employee ID
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Employee found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Employee'
+ *       404:
+ *         description: Employee not found
+ *       500:
+ *         description: Internal server error
+ */
+router.get("/:id", getEmployeeById); // Get employee by ID
 
 export default router;
