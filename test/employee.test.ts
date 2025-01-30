@@ -21,5 +21,11 @@ describe("Employee CRUD Operations", () => {
     createdEmployeeId = response.body.id;
     });
 
+    it("should get all employees", async () => {
+      const response = await request(app).get("/api/v1/employees");
+      expect(response.status).toBe(200);
+      expect(Array.isArray(response.body)).toBe(true);
+    });
+
   });
       
