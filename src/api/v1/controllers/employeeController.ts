@@ -2,6 +2,15 @@ import { Request, Response } from "express";
 import * as employeeService from "../services/employeeService";
 import { Employee } from "../interfaces/employee";
 
+// Helper function to handle unknown errors
+const handleError = (error: unknown, res: Response, message: string) => {
+  if (error instanceof Error) {
+    res.status(500).json({ message, error: error.message });
+  } else {
+    res.status(500).json({ message, error: "An unknown error occurred" });
+  }
+};
+
 export const createEmployee = async (req: Request, res: Response): Promise<void> => {
   try {
     const employeeData: Employee = req.body;
@@ -9,7 +18,7 @@ export const createEmployee = async (req: Request, res: Response): Promise<void>
     res.status(201).json(newEmployee);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error creating employee", error: error.message });
+    handleError(error, res, "Error creating employee");
   }
 };
 
@@ -19,7 +28,7 @@ export const getAllEmployees = async (req: Request, res: Response): Promise<void
     res.status(200).json(employees);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error fetching employees", error: error.message });
+    handleError(error, res, "Error fetching employees");
   }
 };
 
@@ -34,7 +43,7 @@ export const getEmployeeById = async (req: Request, res: Response): Promise<void
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error fetching employee", error: error.message });
+    handleError(error, res, "Error fetching employee");
   }
 };
 
@@ -50,7 +59,7 @@ export const updateEmployee = async (req: Request, res: Response): Promise<void>
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error updating employee", error: error.message });
+    handleError(error, res, "Error updating employee");
   }
 };
 
@@ -65,6 +74,6 @@ export const deleteEmployee = async (req: Request, res: Response): Promise<void>
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error deleting employee", error: error.message });
+    handleError(error, res, "Error deleting employee");
   }
 };
