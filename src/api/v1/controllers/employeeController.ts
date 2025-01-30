@@ -11,3 +11,13 @@ export const createEmployee = async (req: Request, res: Response): Promise<void>
     res.status(500).json({ message: "Error creating employee", error: error.message });
   }
 };
+
+export const getAllEmployees = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const employees = await employeeService.getAllEmployees();
+    res.status(200).json(employees);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error fetching employees", error: error.message });
+  }
+};

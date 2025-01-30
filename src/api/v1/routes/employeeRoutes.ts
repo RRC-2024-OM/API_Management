@@ -56,4 +56,5 @@ router.post("/", createEmployee); // Create employee
  */
 router.get("/", getAllEmployees); // Get all employees
 
+
 export default router;
