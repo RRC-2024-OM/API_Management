@@ -42,5 +42,11 @@ describe("Employee CRUD Operations", () => {
       expect(response.body.position).toBe("Senior Developer");
     });
 
+    it("should delete an employee", async () => {
+      const response = await request(app).delete(`/api/v1/employees/${createdEmployeeId}`);
+      expect(response.status).toBe(200);
+      expect(response.body.message).toBe("Employee deleted successfully");
+    });
+
   });
       
