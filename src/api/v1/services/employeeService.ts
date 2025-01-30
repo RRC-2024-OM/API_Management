@@ -1,4 +1,4 @@
-import { Employee } from "../interfaces/Employee";
+import { Employee } from "../interfaces/employee";
 
 // Mock in-memory "database"
 let employees: Employee[] = [];

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import * as employeeService from "../services/employeeService";
-import { Employee } from "../interfaces/Employee";
+import { Employee } from "../interfaces/employee";
 
 export const createEmployee = async (req: Request, res: Response): Promise<void> => {
   try {
