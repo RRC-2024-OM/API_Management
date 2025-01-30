@@ -1,5 +1,5 @@
 import {Router} from "express";
-import { createEmployee } from "../controllers/employeeController";
+import { createEmployee, getAllEmployees } from "../controllers/employeeController";
 
 const router = Router();
 
@@ -35,5 +35,25 @@ const router = Router();
  *         description: Internal server error
  */
 router.post("/", createEmployee); // Create employee
+
+/**
+ * @swagger
+ * /api/v1/employees:
+ *   get:
+ *     summary: Get all employees
+ *     description: Returns a list of all employees in the directory.
+ *     responses:
+ *       200:
+ *         description: List of employees
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Employee'
+ *       500:
+ *         description: Internal server error
+ */
+router.get("/", getAllEmployees); // Get all employees
 
 export default router;

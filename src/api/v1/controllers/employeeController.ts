@@ -1,24 +1,13 @@
-import { Request, Response } from "express";
-import { createEmployee, getEmployees } from "../services/employeeService";
+import * as employeeService from "../services/employeeService";
+import { Employee } from "../interfaces/employee";
 
-export const createEmployeeHandler = (req: Request, res: Response) => {
+export const createEmployee = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { name, position, department, email, phone, branchId } = req.body;
-    if (!name || !position || !department || !email || !phone || !branchId) {
-      return res.status(400).json({ error: "All fields are required" });
-    }
-    const employee = createEmployee({ name, position, department, email, phone, branchId });
-    res.status(201).json(employee);
+    const employeeData: Employee = req.body;
+    const newEmployee = await employeeService.createEmployee(employeeData);
+    res.status(201).json(newEmployee);
   } catch (error) {
-    res.status(500).json({ error: "Internal server error" });
-  }
-};
-
-export const getEmployeesHandler = (req: Request, res: Response) => {
-  try {
-    const employees = getEmployees();
-    res.status(200).json(employees);
-  } catch (error) {
-    res.status(500).json({ error: "Internal server error" });
+    console.error(error);
+    res.status(500).json({ message: "Error creating employee", error: error.message });
   }
 };
