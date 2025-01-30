@@ -1,5 +1,6 @@
+import { Request, Response } from "express";
 import * as employeeService from "../services/employeeService";
-import { Employee } from "../interfaces/employee";
+import { Employee } from "../interfaces/Employee";
 
 export const createEmployee = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -32,7 +33,8 @@ export const getEmployeeById = async (req: Request, res: Response): Promise<void
       res.status(404).json({ message: "Employee not found" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Error fetching employee", error });
+    console.error(error);
+    res.status(500).json({ message: "Error fetching employee", error: error.message });
   }
 };
 
