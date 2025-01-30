@@ -1,5 +1,5 @@
 import {Router} from "express";
-import { createEmployee, getAllEmployees, getEmployeeById } from "../controllers/employeeController";
+import { createEmployee, getAllEmployees, getEmployeeById, updateEmployee } from "../controllers/employeeController";
 
 const router = Router();
 
@@ -82,5 +82,47 @@ router.get("/", getAllEmployees); // Get all employees
  *         description: Internal server error
  */
 router.get("/:id", getEmployeeById); // Get employee by ID
+
+/**
+ * @swagger
+ * /api/v1/employees/{id}:
+ *   put:
+ *     summary: Update an employee
+ *     description: Updates the employee's details.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: Employee ID
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               position:
+ *                 type: string
+ *               department:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *               branchId:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: Employee updated successfully
+ *       404:
+ *         description: Employee not found
+ *       500:
+ *         description: Internal server error
+ */
+router.put("/:id", updateEmployee); // Update employee
 
 export default router;
