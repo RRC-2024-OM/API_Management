@@ -27,5 +27,11 @@ describe("Employee CRUD Operations", () => {
       expect(Array.isArray(response.body)).toBe(true);
     });
 
+    it("should get a single employee by ID", async () => {
+      const response = await request(app).get(`/api/v1/employees/${createdEmployeeId}`);
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveProperty("id", createdEmployeeId);
+    });
+
   });
       
