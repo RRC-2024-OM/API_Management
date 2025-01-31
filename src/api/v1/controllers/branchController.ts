@@ -20,3 +20,13 @@ export const createBranch = async (req: Request, res: Response): Promise<void> =
       handleError(error, res, "Error creating branch");
     }
   };
+
+export const getAllBranches = async (_req: Request, res: Response): Promise<void> => {
+    try {
+      const branches = await branchService.getAllBranches();
+      res.status(200).json(branches);
+    } catch (error) {
+      console.error(error);
+      handleError(error, res, "Error fetching branches");
+    }
+  };
