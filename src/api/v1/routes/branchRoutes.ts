@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createBranch } from "../controllers/branchController";
+import { createBranch, getAllBranches } from "../controllers/branchController";
 
 const router = Router();
 
@@ -34,5 +34,17 @@ const router = Router();
  *         description: Branch created successfully
  */
 router.post("/", createBranch);
+
+/**
+ * @swagger
+ * /api/v1/branches:
+ *   get:
+ *     summary: Get all branches
+ *     tags: [Branch Management]
+ *     responses:
+ *       200:
+ *         description: List of branches
+ */
+router.get("/", getAllBranches);
 
 export default router;
