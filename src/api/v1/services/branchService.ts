@@ -9,4 +9,6 @@ export const createBranch = async (branchData: Branch): Promise<Branch> => {
     return newBranch;
   };
 
-  
+  export const getAllBranches = async (): Promise<Branch[]> => {
+    return branches;
+  };
