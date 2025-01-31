@@ -12,3 +12,8 @@ export const createBranch = async (branchData: Branch): Promise<Branch> => {
   export const getAllBranches = async (): Promise<Branch[]> => {
     return branches;
   };
+
+  export const getBranchById = async (id: number): Promise<Branch | undefined> => {
+    return branches.find(branch => branch.id === id);
+  };
+  
