@@ -32,14 +32,14 @@ const options = {
       },
     ],
   },
-  apis: ["./src/api/v1/routes/*.ts", "./src/app.ts"], // Include app.ts for health check
+  apis: ["./src/api/v1/routes/*.ts", "./src/app.ts"], // Include only relevant files
 };
 
 const swaggerSpec = swaggerJsdoc(options);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// Routes
-app.use("/api/v1/employees", employeeRoutes); // Employee routes
+// Employee routes
+app.use("/api/v1/employees", employeeRoutes);
 
 /**
  * @swagger
