@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createBranch, getAllBranches } from "../controllers/branchController";
+import { createBranch, getAllBranches, getBranchById, updateBranch, deleteBranch } from "../controllers/branchController";
 
 const router = Router();
 
@@ -46,5 +46,67 @@ router.post("/", createBranch);
  *         description: List of branches
  */
 router.get("/", getAllBranches);
+
+/**
+ * @swagger
+ * /api/v1/branches/{id}:
+ *   get:
+ *     summary: Get branch by ID
+ *     tags: [Branch Management]
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Branch found
+ *       404:
+ *         description: Branch not found
+ */
+router.get("/:id", getBranchById);
+
+/**
+ * @swagger
+ * /api/v1/branches/{id}:
+ *   put:
+ *     summary: Update a branch
+ *     tags: [Branch Management]
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *     responses:
+ *       200:
+ *         description: Branch updated successfully
+ */
+router.put("/:id", updateBranch);
+
+/**
+ * @swagger
+ * /api/v1/branches/{id}:
+ *   delete:
+ *     summary: Delete a branch
+ *     tags: [Branch Management]
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Branch deleted successfully
+ */
+router.delete("/:id", deleteBranch);
 
 export default router;
