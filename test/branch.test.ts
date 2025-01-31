@@ -29,4 +29,30 @@ describe("Branch Management API", () => {
     expect(response.body.length).toBeGreaterThan(0);
   });
 
+// Update branch details
+  it("should update branch details", async () => {
+    const response = await request(app)
+      .put(`/api/v1/branches/${branchId}`)
+      .send({
+        address: "456 Updated St, New City, New Country",
+      });
+
+    expect(response.status).toBe(200);
+    expect(response.body.address).toBe("456 Updated St, New City, New Country");
+  });
+
+// Delete a branch
+  it("should delete a branch", async () => {
+    const response = await request(app).delete(`/api/v1/branches/${branchId}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("message", "Branch deleted successfully");
+  });
+
+// Test for non-existent branch
+  it("should return 404 when branch not found", async () => {
+    const response = await request(app).get(`/api/v1/branches/99999`);
+    expect(response.status).toBe(404);
+  });
+
   });
