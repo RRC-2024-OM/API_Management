@@ -3,6 +3,7 @@ import morgan from "morgan";
 import swaggerUi from "swagger-ui-express";
 import swaggerJsdoc from "swagger-jsdoc";
 import employeeRoutes from "./api/v1/routes/employeeRoutes";
+import branchRoutes from "./api/v1/routes/branchRoutes";
 
 // Initialize express app
 const app: Application = express();
@@ -16,9 +17,9 @@ const options = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "Employee API",
+      title: "Company API",
       version: "1.0.0",
-      description: "API for managing employees in the company",
+      description: "API for managing employees and branches in the company",
     },
     servers: [{ url: "http://localhost:3000" }],
     tags: [
@@ -30,9 +31,13 @@ const options = {
         name: "Employee Management",
         description: "Operations related to managing employees",
       },
+      {
+        name: "Branch Management",
+        description: "Operations related to managing branches",
+      },
     ],
   },
-  apis: ["./src/api/v1/routes/*.ts", "./src/app.ts"], // Include only relevant files
+  apis: ["./src/api/v1/routes/*.ts", "./src/app.ts"], 
 };
 
 const swaggerSpec = swaggerJsdoc(options);
@@ -40,6 +45,9 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Employee routes
 app.use("/api/v1/employees", employeeRoutes);
+
+// Branch routes
+app.use("/api/v1/branches", branchRoutes);
 
 /**
  * @swagger
