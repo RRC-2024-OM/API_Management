@@ -30,3 +30,18 @@ export const getAllBranches = async (_req: Request, res: Response): Promise<void
       handleError(error, res, "Error fetching branches");
     }
   };
+
+export const getBranchById = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const branchId = parseInt(req.params.id);
+      const branch = await branchService.getBranchById(branchId);
+      if (branch) {
+        res.status(200).json(branch);
+      } else {
+        res.status(404).json({ message: "Branch not found" });
+      }
+    } catch (error) {
+      console.error(error);
+      handleError(error, res, "Error fetching branch");
+    }
+  };
