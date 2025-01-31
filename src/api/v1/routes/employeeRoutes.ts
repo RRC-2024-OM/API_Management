@@ -9,6 +9,8 @@ const router = Router();
  *   post:
  *     summary: Create a new employee
  *     description: Creates a new employee with the provided details.
+ *     tags:
+ *       - Employee Management
  *     requestBody:
  *       required: true
  *       content:
@@ -34,27 +36,23 @@ const router = Router();
  *       500:
  *         description: Internal server error
  */
-router.post("/", createEmployee); // Create employee
+router.post("/", createEmployee);
 
 /**
  * @swagger
  * /api/v1/employees:
  *   get:
  *     summary: Get all employees
- *     description: Returns a list of all employees in the directory.
+ *     description: Returns a list of all employees.
+ *     tags:
+ *       - Employee Management
  *     responses:
  *       200:
  *         description: List of employees
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Employee'
  *       500:
  *         description: Internal server error
  */
-router.get("/", getAllEmployees); // Get all employees
+router.get("/", getAllEmployees);
 
 /**
  * @swagger
@@ -62,6 +60,8 @@ router.get("/", getAllEmployees); // Get all employees
  *   get:
  *     summary: Get employee by ID
  *     description: Returns the employee with the specified ID.
+ *     tags:
+ *       - Employee Management
  *     parameters:
  *       - name: id
  *         in: path
@@ -72,23 +72,19 @@ router.get("/", getAllEmployees); // Get all employees
  *     responses:
  *       200:
  *         description: Employee found
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Employee'
  *       404:
  *         description: Employee not found
- *       500:
- *         description: Internal server error
  */
-router.get("/:id", getEmployeeById); // Get employee by ID
+router.get("/:id", getEmployeeById);
 
 /**
  * @swagger
  * /api/v1/employees/{id}:
  *   put:
  *     summary: Update an employee
- *     description: Updates the employee's details.
+ *     description: Updates an employee's details.
+ *     tags:
+ *       - Employee Management
  *     parameters:
  *       - name: id
  *         in: path
@@ -120,10 +116,8 @@ router.get("/:id", getEmployeeById); // Get employee by ID
  *         description: Employee updated successfully
  *       404:
  *         description: Employee not found
- *       500:
- *         description: Internal server error
  */
-router.put("/:id", updateEmployee); // Update employee
+router.put("/:id", updateEmployee);
 
 /**
  * @swagger
@@ -131,6 +125,8 @@ router.put("/:id", updateEmployee); // Update employee
  *   delete:
  *     summary: Delete an employee
  *     description: Deletes the employee with the specified ID.
+ *     tags:
+ *       - Employee Management
  *     parameters:
  *       - name: id
  *         in: path
@@ -143,9 +139,7 @@ router.put("/:id", updateEmployee); // Update employee
  *         description: Employee deleted successfully
  *       404:
  *         description: Employee not found
- *       500:
- *         description: Internal server error
  */
-router.delete("/:id", deleteEmployee); // Delete employee
+router.delete("/:id", deleteEmployee);
 
 export default router;

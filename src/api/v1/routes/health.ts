@@ -1,19 +1,23 @@
-import express from "express";
+import { Router } from "express";
 
-const router = express.Router();
+const router = Router();
 
 /**
  * @swagger
- * /health:
+ * /api/v1/health:
  *   get:
- *     summary: Health check endpoint
- *     description: Returns a simple health check message
+ *     summary: Health Check
+ *     description: Check if the server is running
+ *     tags:
+ *       - Server Health Check
  *     responses:
  *       200:
- *         description: Server is healthy
+ *         description: Server is up and running
+ *       500:
+ *         description: Server error
  */
 router.get("/health", (req, res) => {
-  res.send("Server is healthy");
+  res.status(200).json({ status: "Server is running" });
 });
 
 export default router;

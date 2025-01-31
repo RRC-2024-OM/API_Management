@@ -21,17 +21,40 @@ const options = {
       description: "API for managing employees in the company",
     },
     servers: [{ url: "http://localhost:3000" }],
+    tags: [
+      {
+        name: "Server Health Check",
+        description: "API to check the server's health status",
+      },
+      {
+        name: "Employee Management",
+        description: "Operations related to managing employees",
+      },
+    ],
   },
-  apis: ["./src/api/v1/routes/*.ts"], // Adjust to match your route path
+  apis: ["./src/api/v1/routes/*.ts", "./src/app.ts"], // Include app.ts for health check
 };
 
 const swaggerSpec = swaggerJsdoc(options);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Routes
-app.use("/api/v1/employees", employeeRoutes);  // Ensure the correct path for employees
+app.use("/api/v1/employees", employeeRoutes); // Employee routes
 
-// Health check route
+/**
+ * @swagger
+ * /health:
+ *   get:
+ *     summary: Server Health Check
+ *     description: Check if the server is running.
+ *     tags:
+ *       - Server Health Check
+ *     responses:
+ *       200:
+ *         description: Server is up and running
+ *       500:
+ *         description: Server error
+ */
 app.get("/health", (req, res) => {
   res.status(200).send("Server is healthy");
 });
