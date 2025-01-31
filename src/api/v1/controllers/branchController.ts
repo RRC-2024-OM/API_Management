@@ -45,3 +45,34 @@ export const getBranchById = async (req: Request, res: Response): Promise<void> 
       handleError(error, res, "Error fetching branch");
     }
   };
+
+export const updateBranch = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const branchId = parseInt(req.params.id);
+      const updatedData: Partial<Branch> = req.body;
+      const updatedBranch = await branchService.updateBranch(branchId, updatedData);
+      if (updatedBranch) {
+        res.status(200).json(updatedBranch);
+      } else {
+        res.status(404).json({ message: "Branch not found" });
+      }
+    } catch (error) {
+      console.error(error);
+      handleError(error, res, "Error updating branch");
+    }
+  };
+  
+export const deleteBranch = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const branchId = parseInt(req.params.id);
+      const result = await branchService.deleteBranch(branchId);
+      if (result) {
+        res.status(200).json({ message: "Branch deleted successfully" });
+      } else {
+        res.status(404).json({ message: "Branch not found" });
+      }
+    } catch (error) {
+      console.error(error);
+      handleError(error, res, "Error deleting branch");
+    }
+  };
