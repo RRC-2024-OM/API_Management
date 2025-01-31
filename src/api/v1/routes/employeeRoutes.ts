@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { createEmployee, getAllEmployees, getEmployeeById, updateEmployee, deleteEmployee } from "../controllers/employeeController";
+import { getEmployeesByBranch, getEmployeesByDepartment } from "../services/employeeService";
 
 const router = Router();
 
@@ -141,5 +142,60 @@ router.put("/:id", updateEmployee);
  *         description: Employee not found
  */
 router.delete("/:id", deleteEmployee);
+
+/**
+ * @swagger
+ * /api/v1/employees/branch/{branchId}:
+ *   get:
+ *     summary: Get all employees for a branch
+ *     description: Returns a list of employees that belong to a specific branch.
+ *     tags:
+ *       - Employee Management
+ *     parameters:
+ *       - name: branchId
+ *         in: path
+ *         required: true
+ *         description: Branch ID
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: List of employees
+ *       404:
+ *         description: Branch not found
+ */
+router.get("/branch/:branchId", async (req, res) => {
+  const branchId = parseInt(req.params.branchId);
+  const employees = await getEmployeesByBranch(branchId);
+  res.status(200).json(employees);
+});
+  
+  /**
+   * @swagger
+   * /api/v1/employees/department/{department}:
+   *   get:
+   *     summary: Get all employees for a department
+   *     description: Returns a list of employees that belong to a specific department.
+   *     tags:
+   *       - Employee Management
+   *     parameters:
+   *       - name: department
+   *         in: path
+   *         required: true
+   *         description: Department name
+   *         schema:
+   *           type: string
+   *     responses:
+   *       200:
+   *         description: List of employees
+   *       404:
+   *         description: Department not found
+   */
+  router.get("/department/:department", async (req, res) => {
+    const department = req.params.department;
+    const employees = await getEmployeesByDepartment(department);
+    res.status(200).json(employees);
+  });
+  
 
 export default router;

@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "../src/app"; 
+import app from "../src/app";
 
 describe("Employee CRUD Operations", () => {
   let createdEmployeeId: number;
@@ -10,7 +10,7 @@ describe("Employee CRUD Operations", () => {
       .send({
         name: "OP Server",
         position: "Developer",
-        department: "Engineering",
+        department: "IT",
         email: "OP.server@example.com",
         phone: "2048967452",
         branchId: 1,
@@ -54,5 +54,25 @@ describe("Employee CRUD Operations", () => {
     console.log(response.body);  // Verify the deletion response
     expect(response.status).toBe(200);
     expect(response.body.message).toBe("Employee deleted successfully");
+  });
+
+  // New test: Get employees by branch ID
+  it("should get employees by branch ID", async () => {
+    const response = await request(app).get("/api/v1/employees/branch/1");
+    console.log(response.body);  // Verify employees for branch 1
+    expect(response.status).toBe(200);
+    expect(Array.isArray(response.body)).toBe(true);
+    expect(response.body.length).toBeGreaterThan(0);  // Expect some employees in branch 1
+  });
+
+  // New test: Get employees by department
+  it('should get employees by department', async () => {
+    // Ensure that the employee is created before querying
+    const response = await request(app).get('/api/v1/employees/department/IT');
+    console.log(response.body);  // Log the response for debugging
+
+    expect(response.status).toBe(200);
+    expect(Array.isArray(response.body)).toBe(true);
+    expect(response.body.length).toBeGreaterThan(0);  // Expect at least one employee in the Engineering department
   });
 });

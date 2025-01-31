@@ -77,3 +77,27 @@ export const deleteEmployee = async (req: Request, res: Response): Promise<void>
     handleError(error, res, "Error deleting employee");
   }
 };
+
+// Get employees by branch ID
+export const getEmployeesByBranch = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const branchId = parseInt(req.params.branchId);
+    const employees = await employeeService.getEmployeesByBranch(branchId);
+    res.status(200).json(employees); // Return employees from the branch
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error fetching employees by branch" });
+  }
+};
+
+// Get employees by department name
+export const getEmployeesByDepartment = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const department = req.params.department;
+    const employees = await employeeService.getEmployeesByDepartment(department);
+    res.status(200).json(employees); // Return employees from the department
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error fetching employees by department" });
+  }
+};
