@@ -40,3 +40,10 @@ export const updateEmployeeSchema: ObjectSchema = Joi.object({
     email: Joi.string().email().messages({
         "string.email": "Email must be a valid email"
     }),
+    phone: Joi.string().regex(/^\d{10}$/).messages({
+        "string.pattern.base": "Phone must be a 10-digit number"
+      }),
+      branchId: Joi.number().messages({
+        "number.base": "Branch ID must be a number"
+      }),
+    }).min(1).messages({'object.min': 'At least one field must be provided for update'});
