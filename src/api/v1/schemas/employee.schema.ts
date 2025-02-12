@@ -10,5 +10,10 @@ export const createEmployeeSchema: ObjectSchema = Joi.object({
         "string.empty": "Position cannot be empty"
     }),
     department: Joi.string().required().messages({
-        ""
-    })
+        "any.required": "Department is required",
+        "string.empty": "Department cannot be empty"
+    }),
+    email: Joi.string().email().required().messages({
+        "any.required": "Email is required",
+        "string.email": "Email must be a valid email"
+    }),
