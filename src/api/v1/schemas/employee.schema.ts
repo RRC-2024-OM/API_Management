@@ -26,3 +26,8 @@ export const createEmployeeSchema: ObjectSchema = Joi.object({
         "number.base": "Branch ID must be a number" // Added message for number type
     }),
 });
+
+export const updateEmployeeSchema: ObjectSchema = Joi.object({
+    name: Joi.string().messages({
+      "string.empty": "Name cannot be empty"
+    }),
