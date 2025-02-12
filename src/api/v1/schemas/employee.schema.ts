@@ -17,3 +17,12 @@ export const createEmployeeSchema: ObjectSchema = Joi.object({
         "any.required": "Email is required",
         "string.email": "Email must be a valid email"
     }),
+    phone: Joi.string().regex(/^\d{10}$/).required().messages({
+        "any.required": "Phone is required",
+        "string.pattern.base": "Phone must be a 10-digit number"
+    }),
+    branchId: Joi.number().required().messages({
+        "any.required": "Branch ID is required",
+        "number.base": "Branch ID must be a number" // Added message for number type
+    }),
+});
