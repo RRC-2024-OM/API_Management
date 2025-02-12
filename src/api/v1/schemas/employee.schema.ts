@@ -23,7 +23,7 @@ export const createEmployeeSchema: ObjectSchema = Joi.object({
     }),
     branchId: Joi.number().required().messages({
         "any.required": "Branch ID is required",
-        "number.base": "Branch ID must be a number" // Added message for number type
+        "number.base": "Branch ID must be a number" 
     }),
 });
 
