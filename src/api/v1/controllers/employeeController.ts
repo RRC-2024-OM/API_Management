@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import * as employeeService from "../services/employeeService";
-import { Employee } from "../interfaces/employee";
+import { Employee } from "../models/employee";
 
 // Helper function to handle unknown errors
 const handleError = (error: unknown, res: Response, message: string) => {

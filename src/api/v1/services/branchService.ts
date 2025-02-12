@@ -1,4 +1,4 @@
-import { Branch } from "../interfaces/branch";
+import { Branch } from "../models/branch";
 
 // Sample branch data
 let branches: Branch[] = [

@@ -1,4 +1,4 @@
-import { Employee } from "../interfaces/employee";
+import { Employee } from "../models/employee";
 
 // Sample employee data
 let employees: Employee[] = [

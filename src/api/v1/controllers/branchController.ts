@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import * as branchService from "../services/branchService";
-import { Branch } from "../interfaces/branch";
+import { Branch } from "../models/branch";
 
 const handleError = (error: unknown, res: Response, message: string) => {
   if (error instanceof Error) {
