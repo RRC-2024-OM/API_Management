@@ -31,3 +31,12 @@ export const updateEmployeeSchema: ObjectSchema = Joi.object({
     name: Joi.string().messages({
       "string.empty": "Name cannot be empty"
     }),
+    position: Joi.string().messages({
+        "string.empty": "Position cannot be empty"
+    }),
+    department: Joi.string().messages({
+        "string.empty": "Department cannot be empty"
+    }),
+    email: Joi.string().email().messages({
+        "string.email": "Email must be a valid email"
+    }),
