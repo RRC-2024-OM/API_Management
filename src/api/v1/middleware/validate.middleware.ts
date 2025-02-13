@@ -20,3 +20,23 @@ export const validate = (schema: ObjectSchema) => {
     }
   };
 };
+
+export const validateQuery = (schema: ObjectSchema) => {
+    return (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { error, value } = schema.validate(req.query);
+  
+        if (error) {
+          const errorMessage = error.details.map(d => d.message).join(', ');
+          return res.status(400).json({ error: errorMessage });
+        }
+  
+        req.query = value;
+        next();
+      } catch (err) {
+        console.error("Error during query validation:", err);
+        res.status(500).json({ error: "An unexpected error occurred during query validation" });
+        next(err); 
+      }
+    };
+  };
