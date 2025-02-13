@@ -101,7 +101,7 @@ router.get("/:id", getEmployeeById);
  *         application/json:
  *           schema:
  *             type: object
- *             properties:
+ *             properties:  # List the updatable properties
  *               name:
  *                 type: string
  *               position:
@@ -143,7 +143,7 @@ router.put('/:id', validateRequest(updateEmployeeSchema), updateEmployee);
  *       404:
  *         description: Employee not found
  */
-router.delete("/:id", deleteEmployee);
+router.delete("/:id", deleteEmployee); 
 
 /**
  * @swagger
@@ -167,37 +167,36 @@ router.delete("/:id", deleteEmployee);
  *         description: Branch not found
  */
 router.get("/branch/:branchId", async (req, res) => {
-  const branchId = parseInt(req.params.branchId);
-  const employees = await getEmployeesByBranch(branchId);
-  res.status(200).json(employees);
+    const branchId = parseInt(req.params.branchId);
+    const employees = await getEmployeesByBranch(branchId);
+    res.status(200).json(employees);
 });
-  
-  /**
-   * @swagger
-   * /api/v1/employees/department/{department}:
-   *   get:
-   *     summary: Get all employees for a department
-   *     description: Returns a list of employees that belong to a specific department.
-   *     tags:
-   *       - Employee Management
-   *     parameters:
-   *       - name: department
-   *         in: path
-   *         required: true
-   *         description: Department name
-   *         schema:
-   *           type: string
-   *     responses:
-   *       200:
-   *         description: List of employees
-   *       404:
-   *         description: Department not found
-   */
-  router.get("/department/:department", async (req, res) => {
+
+/**
+ * @swagger
+ * /api/v1/employees/department/{department}:
+ *   get:
+ *     summary: Get all employees for a department
+ *     description: Returns a list of employees that belong to a specific department.
+ *     tags:
+ *       - Employee Management
+ *     parameters:
+ *       - name: department
+ *         in: path
+ *         required: true
+ *         description: Department name
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: List of employees
+ *       404:
+ *         description: Department not found
+ */
+router.get("/department/:department", async (req, res) => {
     const department = req.params.department;
     const employees = await getEmployeesByDepartment(department);
     res.status(200).json(employees);
-  });
-  
+});
 
 export default router;

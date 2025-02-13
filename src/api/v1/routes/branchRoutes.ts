@@ -87,11 +87,20 @@ router.get("/:id", getBranchById);
  *         application/json:
  *           schema:
  *             type: object
+ *             # You should list the properties that can be updated here.
+ *             # For example:
+ *             # properties:
+ *             #   name:
+ *             #     type: string
+ *             #   address:
+ *             #     type: string
+ *             #   phone:
+ *             #     type: string
  *     responses:
  *       200:
  *         description: Branch updated successfully
  */
-router.put('/:id', validateRequest(updateBranchSchema), updateBranch);
+router.put("/:id", validateRequest(updateBranchSchema), updateBranch);
 
 /**
  * @swagger
@@ -109,6 +118,6 @@ router.put('/:id', validateRequest(updateBranchSchema), updateBranch);
  *       200:
  *         description: Branch deleted successfully
  */
-router.delete("/:id", deleteBranch);
+router.delete("/:id", deleteBranch); 
 
 export default router;

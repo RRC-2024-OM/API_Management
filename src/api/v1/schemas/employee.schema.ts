@@ -1,49 +1,43 @@
-import Joi, { ObjectSchema } from 'joi';
+// src/schemas/employee.schema.ts
+import * as Joi from 'joi';
 
-export const createEmployeeSchema: ObjectSchema = Joi.object({
+export const createEmployeeSchema: Joi.ObjectSchema = Joi.object({
     name: Joi.string().required().messages({
-        "any.required": "Name is required",
-        "string.empty": "Name cannot be empty" 
+        'any.required': 'Name is required'
     }),
     position: Joi.string().required().messages({
-        "any.required": "Department is required",
-        "string.empty": "Position cannot be empty"
+        'any.required': 'Position is required'
     }),
     department: Joi.string().required().messages({
-        "any.required": "Department is required",
-        "string.empty": "Department cannot be empty"
+        'any.required': 'Department is required'
     }),
     email: Joi.string().email().required().messages({
-        "any.required": "Email is required",
-        "string.email": "Email must be a valid email"
+        'any.required': 'Email is required',
+        'string.email': 'Invalid email format.'
     }),
-    phone: Joi.string().regex(/^\d{10}$/).required().messages({
+    phone: Joi.string().regex(/^[+]?[\d\s-()]{7,}$/).required().messages({ // Updated regex here
         "any.required": "Phone is required",
-        "string.pattern.base": "Phone must be a 10-digit number"
+        "string.pattern.base": "Phone must be a valid phone number (at least 7 digits/symbols)" // Updated message
     }),
-    branchId: Joi.number().required().messages({
-        "any.required": "Branch ID is required",
-        "number.base": "Branch ID must be a number" 
-    }),
+    branchId: Joi.number().integer().required().messages({
+        'any.required': 'Branch ID is required',
+        'number.base': 'Branch ID must be a number.'
+    })
 });
 
-export const updateEmployeeSchema: ObjectSchema = Joi.object({
-    name: Joi.string().messages({
-    "string.empty": "Name cannot be empty"
+export const updateEmployeeSchema: Joi.ObjectSchema = Joi.object({
+    name: Joi.string().optional(),
+    position: Joi.string().optional(),
+    department: Joi.string().optional(),
+    email: Joi.string().email().optional().messages({
+        'string.email': 'Invalid email format.'
     }),
-    position: Joi.string().messages({
-        "string.empty": "Position cannot be empty"
+    phone: Joi.string().regex(/^[+]?[\d\s-()]{7,}$/).optional().messages({ // Updated regex here
+        "string.pattern.base": "Phone must be a valid phone number (at least 7 digits/symbols)" // Updated message
     }),
-    department: Joi.string().messages({
-        "string.empty": "Department cannot be empty"
-    }),
-    email: Joi.string().email().messages({
-        "string.email": "Email must be a valid email"
-    }),
-    phone: Joi.string().regex(/^\d{10}$/).messages({
-        "string.pattern.base": "Phone must be a 10-digit number"
-    }),
-    branchId: Joi.number().messages({
-        "number.base": "Branch ID must be a number"
-    }),
-    }).min(1).messages({'object.min': 'At least one field must be provided for update'});
+    branchId: Joi.number().integer().optional().messages({
+        'number.base': 'Branch ID must be a number.'
+    })
+}).min(1).messages({ // Ensure at least one field is provided for update
+    'object.min': 'At least one field to update must be provided'
+});

@@ -53,7 +53,7 @@ export const updateEmployee = async (req: Request, res: Response): Promise<void>
     const updatedData: Partial<Employee> = req.body;
     const updatedEmployee = await employeeService.updateEmployee(employeeId, updatedData);
     if (updatedEmployee) {
-      res.status(200).json(updatedEmployee); // Return updated employee data
+      res.status(200).json(updatedEmployee); 
     } else {
       res.status(404).json({ message: "Employee not found" });
     }
