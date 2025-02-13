@@ -29,7 +29,7 @@ export const createEmployeeSchema: ObjectSchema = Joi.object({
 
 export const updateEmployeeSchema: ObjectSchema = Joi.object({
     name: Joi.string().messages({
-      "string.empty": "Name cannot be empty"
+    "string.empty": "Name cannot be empty"
     }),
     position: Joi.string().messages({
         "string.empty": "Position cannot be empty"
@@ -42,8 +42,8 @@ export const updateEmployeeSchema: ObjectSchema = Joi.object({
     }),
     phone: Joi.string().regex(/^\d{10}$/).messages({
         "string.pattern.base": "Phone must be a 10-digit number"
-      }),
-      branchId: Joi.number().messages({
+    }),
+    branchId: Joi.number().messages({
         "number.base": "Branch ID must be a number"
-      }),
+    }),
     }).min(1).messages({'object.min': 'At least one field must be provided for update'});

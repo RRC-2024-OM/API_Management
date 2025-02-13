@@ -1,7 +1,8 @@
 import { Router } from "express";
 import { createEmployee, getAllEmployees, getEmployeeById, updateEmployee, deleteEmployee } from "../controllers/employeeController";
 import { getEmployeesByBranch, getEmployeesByDepartment } from "../services/employeeService";
-import { validate } from "../middleware/validate.middleware";
+import { validateRequest } from "../middleware/validate.middleware";
+import { createEmployeeSchema, updateEmployeeSchema } from "../schemas/employee.schema";
 
 const router = Router();
 
@@ -38,7 +39,7 @@ const router = Router();
  *       500:
  *         description: Internal server error
  */
-router.post('/', validate(createEmployeeSchema), createEmployee);
+router.post('/', validateRequest(createEmployeeSchema), createEmployee);
 
 /**
  * @swagger
@@ -119,7 +120,7 @@ router.get("/:id", getEmployeeById);
  *       404:
  *         description: Employee not found
  */
-router.put('/:id', validate(updateEmployeeSchema), updateEmployee);
+router.put('/:id', validateRequest(updateEmployeeSchema), updateEmployee);
 
 /**
  * @swagger

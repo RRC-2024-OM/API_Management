@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { createBranch, getAllBranches, getBranchById, updateBranch, deleteBranch } from "../controllers/branchController";
+import { createBranchSchema, updateBranchSchema } from "../schemas/branch.schema";
+import { validateRequest } from "../middleware/validate.middleware";
 
 const router = Router();
 
@@ -33,7 +35,7 @@ const router = Router();
  *       201:
  *         description: Branch created successfully
  */
-router.post('/', validate(createBranchSchema), createBranch);
+router.post('/', validateRequest(createBranchSchema), createBranch);
 
 /**
  * @swagger
@@ -89,7 +91,7 @@ router.get("/:id", getBranchById);
  *       200:
  *         description: Branch updated successfully
  */
-router.put('/:id', validate(updateBranchSchema), updateBranch);
+router.put('/:id', validateRequest(updateBranchSchema), updateBranch);
 
 /**
  * @swagger
