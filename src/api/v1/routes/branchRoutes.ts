@@ -1,7 +1,9 @@
 import { Router } from "express";
+import { ValidationError as JoiValidationError } from 'joi';
 import { createBranch, getAllBranches, getBranchById, updateBranch, deleteBranch } from "../controllers/branchController";
 import { createBranchSchema, updateBranchSchema } from "../schemas/branch.schema";
 import { validateRequest } from "../middleware/validate.middleware";
+import { AppError, ValidationError, AuthError } from "../middleware/errorHandler.middleware";
 
 const router = Router();
 
@@ -48,6 +50,33 @@ router.post('/', validateRequest(createBranchSchema), createBranch);
  *         description: List of branches
  */
 router.get("/", getAllBranches);
+
+// ------------------------------------------------------------------
+// Test route for error handling 
+// ------------------------------------------------------------------
+router.get('/test-error/:errorType', (req, res, next) => {
+    const errorType = req.params.errorType;
+
+    if (errorType === 'validation') {
+        next(new ValidationError('Test validation error from test-error route'));
+    } else if (errorType === 'auth') {
+        next(new AuthError('Test authentication error from test-error route'));
+    } else if (errorType === 'app') {
+        next(new AppError('Test application error from test-error route', 503));
+    } else if (errorType === 'joi') {
+        const joiError = new JoiValidationError('"testParam" is required for test-error route', [{
+            message: '"testParam" is required for test-error route',
+            path: ['testParam'],
+            type: 'any.required',
+            context: { key: 'testParam', label: 'testParam' }
+        }], undefined);
+        next(joiError);
+    } else if (errorType === 'generic') {
+        next(new Error('Generic error from test-error route'));
+    } else {
+        res.status(200).send('Test endpoint - no error thrown'); // Default success
+    }
+});
 
 /**
  * @swagger
