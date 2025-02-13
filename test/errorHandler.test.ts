@@ -4,7 +4,7 @@ import { errorHandler, AppError, ValidationError, AuthError } from '../src/api/v
 import { ValidationError as JoiValidationError } from 'joi';
 
 const app = express();
-app.use(express.json()); // Important for parsing request bodies in some cases
+app.use(express.json());
 
 // Simulate routes that throw different types of errors
 app.get('/validation-error', (req, res, next) => {
@@ -16,7 +16,7 @@ app.get('/auth-error', (req, res, next) => {
 });
 
 app.get('/app-error', (req, res, next) => {
-    next(new AppError('Something went wrong in the application', 503)); // Example AppError with custom status
+    next(new AppError('Something went wrong in the application', 503));
 });
 
 app.get('/joi-validation-error', (req, res, next) => {
@@ -34,7 +34,6 @@ app.get('/generic-error', (req, res, next) => {
 });
 
 app.get('/unknown-error', (req, res, next) => {
-    // Simulate throwing something that is not an Error instance
     next("This is not an Error object");
 });
 
@@ -63,7 +62,7 @@ describe('Error Handling Middleware Tests', () => {
     test('should handle JoiValidationError and return 400 status with Joi error details', async () => {
         const response = await request(app).get('/joi-validation-error');
         expect(response.status).toBe(400);
-        expect(response.body.errors).toEqual([{ message: '"name" is required' }]); // Adapt assertion to match Joi error format
+        expect(response.body.errors).toEqual([{ message: '"name" is required' }]);
     });
 
     test('should handle generic Error and return 500 status with default message', async () => {
