@@ -33,7 +33,7 @@ const router = Router();
  *       201:
  *         description: Branch created successfully
  */
-router.post("/", createBranch);
+router.post('/', validate(createBranchSchema), createBranch);
 
 /**
  * @swagger
@@ -89,7 +89,7 @@ router.get("/:id", getBranchById);
  *       200:
  *         description: Branch updated successfully
  */
-router.put("/:id", updateBranch);
+router.put('/:id', validate(updateBranchSchema), updateBranch);
 
 /**
  * @swagger
