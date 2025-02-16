@@ -1,9 +1,7 @@
 import { Router } from "express";
-import { createEmployee, getAllEmployees, getEmployeeById, updateEmployee, deleteEmployee } from "../controllers/employeeController";
-import { getEmployeesByBranch, getEmployeesByDepartment } from "../services/employeeService";
+import { createEmployee, getAllEmployees, getEmployeeById, updateEmployee, deleteEmployee, getEmployeesByBranch, getEmployeesByDepartment } from "../controllers/employeeController";
 import { validateRequest } from "../middleware/validate.middleware";
 import { createEmployeeSchema, updateEmployeeSchema } from "../schemas/employee.schema";
-
 const router = Router();
 
 /**
@@ -166,11 +164,7 @@ router.delete("/:id", deleteEmployee);
  *       404:
  *         description: Branch not found
  */
-router.get("/branch/:branchId", async (req, res) => {
-    const branchId = parseInt(req.params.branchId);
-    const employees = await getEmployeesByBranch(branchId);
-    res.status(200).json(employees);
-});
+router.get("/branch/:branchId", getEmployeesByBranch);
 
 /**
  * @swagger
@@ -193,10 +187,6 @@ router.get("/branch/:branchId", async (req, res) => {
  *       404:
  *         description: Department not found
  */
-router.get("/department/:department", async (req, res) => {
-    const department = req.params.department;
-    const employees = await getEmployeesByDepartment(department);
-    res.status(200).json(employees);
-});
+router.get("/department/:department", getEmployeesByDepartment);
 
 export default router;
