@@ -1,10 +1,15 @@
 import { Router } from "express";
-import { createBranch, getAllBranches, getBranchById, updateBranch, deleteBranch } from "../controllers/branchController";
+import {  BranchController } from "../controllers/branchController";
+import { BranchService } from "../services/branchService";
 import { createBranchSchema, updateBranchSchema } from "../schemas/branch.schema";
 import { validateRequest } from "../middleware/validate.middleware";
+import { FirebaseRepository } from "../repositories/firesbaseRepository";
 
 const router = Router();
 
+const firebaseRepository = new FirebaseRepository();
+const branchService = new BranchService(firebaseRepository);
+const branchController = new BranchController(branchService);
 /**
  * @swagger
  * tags:
@@ -35,7 +40,7 @@ const router = Router();
  *       201:
  *         description: Branch created successfully
  */
-router.post('/', validateRequest(createBranchSchema), createBranch);
+router.post('/', validateRequest(createBranchSchema), branchController.createBranch);
 
 /**
  * @swagger
@@ -47,7 +52,7 @@ router.post('/', validateRequest(createBranchSchema), createBranch);
  *       200:
  *         description: List of branches
  */
-router.get("/", getAllBranches);
+router.get("/", branchController.getAllBranches);
 
 /**
  * @swagger
@@ -67,7 +72,7 @@ router.get("/", getAllBranches);
  *       404:
  *         description: Branch not found
  */
-router.get("/:id", getBranchById);
+router.get("/:id", branchController.getBranchById);
 
 /**
  * @swagger
@@ -100,7 +105,7 @@ router.get("/:id", getBranchById);
  *       200:
  *         description: Branch updated successfully
  */
-router.put("/:id", validateRequest(updateBranchSchema), updateBranch);
+router.put("/:id", validateRequest(updateBranchSchema), branchController.updateBranch);
 
 /**
  * @swagger
@@ -118,6 +123,6 @@ router.put("/:id", validateRequest(updateBranchSchema), updateBranch);
  *       200:
  *         description: Branch deleted successfully
  */
-router.delete("/:id", deleteBranch); 
+router.delete("/:id", branchController.deleteBranch); 
 
 export default router;
