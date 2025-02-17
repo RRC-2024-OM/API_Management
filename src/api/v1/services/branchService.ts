@@ -42,48 +42,30 @@ export class BranchService {
 
   async getBranchById(id: string): Promise<Branch | undefined> {
     try {
-      console.log("Service: Getting branch by ID:", id);
-      const branch = await this.firebaseRepository.getBranchById(id);
-      console.log("Service: Branch retrieved:", branch);
-      return branch;
+      const numericId = parseInt(id, 10); // Convert string id to number
+      return await this.firebaseRepository.getBranchById(numericId);
     } catch (error) {
       console.error("Service: Error getting branch by ID:", error);
-      if (error instanceof Error) {
-        console.error("Service: Error message:", error.message);
-        console.error("Service: Error stack:", error.stack);
-      }
       throw error;
     }
   }
 
   async updateBranch(id: string, updateData: Partial<Branch>): Promise<Branch | null> {
     try {
-      console.log("Service: Updating branch:", id, updateData);
-      const updatedBranch = await this.firebaseRepository.updateBranch(id, updateData);
-      console.log("Service: Branch updated:", updatedBranch);
-      return updatedBranch;
+      const numericId = parseInt(id, 10); // Convert string id to number
+      return await this.firebaseRepository.updateBranch(numericId, updateData);
     } catch (error) {
       console.error("Service: Error updating branch:", error);
-      if (error instanceof Error) {
-        console.error("Service: Error message:", error.message);
-        console.error("Service: Error stack:", error.stack);
-      }
       throw error;
     }
   }
 
   async deleteBranch(id: string): Promise<boolean> {
     try {
-      console.log("Service: Deleting branch:", id);
-      const result = await this.firebaseRepository.deleteBranch(id);
-      console.log("Service: Branch deleted:", result);
-      return result;
+      const numericId = parseInt(id, 10); // Convert string id to number
+      return await this.firebaseRepository.deleteBranch(numericId);
     } catch (error) {
       console.error("Service: Error deleting branch:", error);
-      if (error instanceof Error) {
-        console.error("Service: Error message:", error.message);
-        console.error("Service: Error stack:", error.stack);
-      }
       throw error;
     }
   }
