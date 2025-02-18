@@ -22,7 +22,7 @@ jobs:
         run: npm ci  
 
       - name: Verify ESLint Installation
-        run: npx eslint --version 
+        run: npx eslint --version  
 
       - name: Run ESLint with Reviewdog
         run: npm run lint
