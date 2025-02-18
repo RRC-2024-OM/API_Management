@@ -1,31 +1,31 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express"; 
 import { EmployeeService } from "../services/employeeService";
 
 export class EmployeeController {
     constructor(private employeeService: EmployeeService) { }
 
-    async createEmployee(req: Request, res: Response) {
+    async createEmployee(req: Request, res: Response, next: NextFunction) { 
         try {
             const employeeData = req.body;
             const newEmployee = await this.employeeService.createEmployee(employeeData);
             res.status(201).json(newEmployee);
         } catch (error) {
             console.error("Controller: Error creating employee:", error);
-            res.status(500).json({ error: "Failed to create employee" });
+            next(error); 
         }
     }
 
-    async getAllEmployees(req: Request, res: Response) {
+    async getAllEmployees(req: Request, res: Response, next: NextFunction) { 
         try {
             const employees = await this.employeeService.getAllEmployees();
             res.status(200).json(employees);
         } catch (error) {
             console.error("Controller: Error getting all employees:", error);
-            res.status(500).json({ error: "Failed to fetch employees" });
+            next(error); 
         }
     }
 
-    async getEmployeeById(req: Request, res: Response) {
+    async getEmployeeById(req: Request, res: Response, next: NextFunction) {
         const id = req.params.id;
         try {
             const employee = await this.employeeService.getEmployeeById(id);
@@ -36,11 +36,11 @@ export class EmployeeController {
             }
         } catch (error) {
             console.error("Controller: Error getting employee by ID:", error);
-            res.status(500).json({ error: "Failed to fetch employee" });
+            next(error); 
         }
     }
 
-    async updateEmployee(req: Request, res: Response) {
+    async updateEmployee(req: Request, res: Response, next: NextFunction) { 
         const id = req.params.id;
         const updateData = req.body;
         try {
@@ -52,11 +52,11 @@ export class EmployeeController {
             }
         } catch (error) {
             console.error("Controller: Error updating employee:", error);
-            res.status(500).json({ error: "Failed to update employee" });
+            next(error); 
         }
     }
 
-    async deleteEmployee(req: Request, res: Response) {
+    async deleteEmployee(req: Request, res: Response, next: NextFunction) { 
         const id = req.params.id;
         try {
             const success = await this.employeeService.deleteEmployee(id);
@@ -67,11 +67,11 @@ export class EmployeeController {
             }
         } catch (error) {
             console.error("Controller: Error deleting employee:", error);
-            res.status(500).json({ error: "Failed to delete employee" });
+            next(error); 
         }
     }
 
-    async getEmployeesByBranch(req: Request, res: Response) {
+    async getEmployeesByBranch(req: Request, res: Response, next: NextFunction) {
         const branchId = parseInt(req.params.branchId, 10);
 
         console.log("Controller: Getting employees by branch ID:", branchId);
@@ -81,18 +81,18 @@ export class EmployeeController {
             res.status(200).json(employees);
         } catch (error) {
             console.error("Controller: Error getting employees by branch ID:", error);
-            res.status(500).json({ error: "Failed to fetch employees" });
+            next(error); 
         }
     }
 
-    async getEmployeesByDepartment(req: Request, res: Response) {
+    async getEmployeesByDepartment(req: Request, res: Response, next: NextFunction) { 
         const department = req.params.department;
         try {
             const employees = await this.employeeService.getEmployeesByDepartment(department);
             res.status(200).json(employees);
         } catch (error) {
             console.error("Controller: Error getting employees by department:", error);
-            res.status(500).json({ error: "Failed to fetch employees" });
+            next(error); 
         }
     }
 }
