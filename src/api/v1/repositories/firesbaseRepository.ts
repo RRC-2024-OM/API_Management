@@ -1,11 +1,11 @@
 import { Branch } from "../models/branch";
 import { Employee } from "../models/employee";
-import { db } from "../../../../config/firebaseConfig"; // Correct path to your config
+import { db } from "../../../../config/firebaseConfig"; 
 
 export class FirebaseRepository {
     private branchesCollection = db.collection("branches");
 
-    // *** Branch Functions (Unmodified - As You Requested) ***
+    // *** Branch Functions ***
     async createBranch(branchData: Omit<Branch, 'id'>): Promise<Branch> {
         try {
             const newBranchRef = this.branchesCollection.doc();
@@ -172,6 +172,36 @@ export class FirebaseRepository {
         } catch (error) {
             console.error("Error deleting employee:", error);
             return false;
+        }
+    }
+
+    async getEmployeesByBranchId(branchId: string | number): Promise<Employee[]> {
+        try {
+            const querySnapshot = await this.employeesCollection.where("branchId", "==", branchId.toString()).get();
+            const employees: Employee[] = [];
+            querySnapshot.forEach((doc) => {
+                const employeeData = doc.data() as Employee;
+                employees.push({ id: doc.id, ...employeeData });
+            });
+            return employees;
+        } catch (error) {
+            console.error("Error getting employees by branch ID:", error);
+            return []; // Or throw the error if you prefer
+        }
+    }
+
+    async getEmployeesByDepartment(department: string): Promise<Employee[]> {
+        try {
+            const querySnapshot = await this.employeesCollection.where("department", "==", department).get();
+            const employees: Employee[] = [];
+            querySnapshot.forEach((doc) => {
+                const employeeData = doc.data() as Employee;
+                employees.push({ id: doc.id, ...employeeData });
+            });
+            return employees;
+        } catch (error) {
+            console.error("Error getting employees by department:", error);
+            return []; // Or throw the error
         }
     }
 
