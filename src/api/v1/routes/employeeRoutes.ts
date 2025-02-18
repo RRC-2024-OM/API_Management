@@ -1,8 +1,15 @@
 import { Router } from "express";
-import { createEmployee, getAllEmployees, getEmployeeById, updateEmployee, deleteEmployee, getEmployeesByBranch, getEmployeesByDepartment } from "../controllers/employeeController";
+import { EmployeeController } from "../controllers/employeeController";
 import { validateRequest } from "../middleware/validate.middleware";
 import { createEmployeeSchema, updateEmployeeSchema } from "../schemas/employee.schema";
+import { EmployeeService } from "../services/employeeService"; 
+import { FirebaseRepository } from "../repositories/firesbaseRepository";
+
+
 const router = Router();
+const firebaseRepository = new FirebaseRepository();
+const employeeService = new EmployeeService(firebaseRepository); 
+const employeeController = new EmployeeController(employeeService); 
 
 /**
  * @swagger
@@ -37,7 +44,7 @@ const router = Router();
  *       500:
  *         description: Internal server error
  */
-router.post('/', validateRequest(createEmployeeSchema), createEmployee);
+router.post('/', validateRequest(createEmployeeSchema), employeeController.createEmployee.bind(employeeController));
 
 /**
  * @swagger
@@ -53,7 +60,7 @@ router.post('/', validateRequest(createEmployeeSchema), createEmployee);
  *       500:
  *         description: Internal server error
  */
-router.get("/", getAllEmployees);
+router.get("/", employeeController.getAllEmployees.bind(employeeController));
 
 /**
  * @swagger
@@ -76,7 +83,7 @@ router.get("/", getAllEmployees);
  *       404:
  *         description: Employee not found
  */
-router.get("/:id", getEmployeeById);
+router.get("/:id", employeeController.getEmployeeById.bind(employeeController));
 
 /**
  * @swagger
@@ -118,7 +125,7 @@ router.get("/:id", getEmployeeById);
  *       404:
  *         description: Employee not found
  */
-router.put('/:id', validateRequest(updateEmployeeSchema), updateEmployee);
+router.put('/:id', validateRequest(updateEmployeeSchema), employeeController.updateEmployee.bind(employeeController));
 
 /**
  * @swagger
@@ -141,7 +148,7 @@ router.put('/:id', validateRequest(updateEmployeeSchema), updateEmployee);
  *       404:
  *         description: Employee not found
  */
-router.delete("/:id", deleteEmployee); 
+router.delete("/:id", employeeController.deleteEmployee.bind(employeeController));
 
 /**
  * @swagger
@@ -164,7 +171,7 @@ router.delete("/:id", deleteEmployee);
  *       404:
  *         description: Branch not found
  */
-router.get("/branch/:branchId", getEmployeesByBranch);
+router.get("/branch/:branchId", employeeController.getEmployeesByBranch.bind(employeeController));
 
 /**
  * @swagger
@@ -187,6 +194,6 @@ router.get("/branch/:branchId", getEmployeesByBranch);
  *       404:
  *         description: Department not found
  */
-router.get("/department/:department", getEmployeesByDepartment);
+router.get("/department/:department", employeeController.getEmployeesByDepartment.bind(employeeController));
 
 export default router;

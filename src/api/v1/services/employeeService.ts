@@ -1,58 +1,96 @@
+// src/api/v1/services/employeeService.ts
 import { Employee } from "../models/employee";
+import { FirebaseRepository } from "../repositories/firesbaseRepository";
 
-// Sample employee data
-let employees: Employee[] = [
-  { id: 1, name: "Alice Johnson", position: "Branch Manager", department: "Management", email: "alice.johnson@pixell-river.com", phone: "604-555-0148", branchId: 1 },
-  { id: 2, name: "Amandeep Singh", position: "Customer Service Representative", department: "Customer Service", email: "amandeep.singh@pixell-river.com", phone: "780-555-0172", branchId: 2 },
-  { id: 3, name: "Maria Garcia", position: "Loan Officer", department: "Loans", email: "maria.garcia@pixell-river.com", phone: "204-555-0193", branchId: 3 },
-  { id: 4, name: "James Wilson", position: "IT Support Specialist", department: "IT", email: "james.wilson@pixell-river.com", phone: "604-555-0134", branchId: 1 },
-  { id: 5, name: "Linda Martinez", position: "Financial Advisor", department: "Advisory", email: "linda.martinez@pixell-river.com", phone: "780-555-0165", branchId: 2 },
-  { id: 6, name: "Michael Brown", position: "Teller", department: "Operations", email: "michael.brown@pixell-river.com", phone: "204-555-0187", branchId: 3 },
-  { id: 7, name: "Patricia Taylor", position: "Operations Manager", department: "Operations", email: "patricia.taylor@pixell-river.com", phone: "204-555-0204", branchId: 3 },
-  { id: 8, name: "Chen Wei", position: "Senior Loan Officer", department: "Loans", email: "chen.wei@pixell-river.com", phone: "204-555-0218", branchId: 5 },
-  { id: 9, name: "Charles Thomas", position: "Accountant", department: "Finance", email: "charles.thomas@pixell-river.com", phone: "204-555-0225", branchId: 5 },
-  { id: 10, name: "Elizabeth Jackson", position: "Marketing Specialist", department: "Marketing", email: "elizabeth.jackson@pixell-river.com", phone: "204-555-0234", branchId: 5 },
-];
+export class EmployeeService {
+    constructor(private firebaseRepository: FirebaseRepository) {} // Inject the repository
 
-export const createEmployee = async (employeeData: Employee): Promise<Employee> => {
-  const newEmployee = { id: employees.length + 1, ...employeeData };
-  employees.push(newEmployee);
-  return newEmployee;
-};
+    async createEmployee(employeeData: Omit<Employee, 'id'>): Promise<Employee> {
+        try {
+            // 1. Get the Branch from Firebase using the numeric ID.
+            const branch = await this.firebaseRepository.getBranchById(employeeData.branchId);
 
-export const getAllEmployees = async (): Promise<Employee[]> => {
-  return employees;
-};
+            if (!branch) {
+                throw new Error("Branch not found"); // Or handle it as a 400
+            }
 
-export const getEmployeeById = async (id: number): Promise<Employee | undefined> => {
-  return employees.find(employee => employee.id === id);
-};
+            // 2. Now, before creating the employee in Firestore, convert the branch ID to a string.
+            const employeeDataWithBranchIdString = { ...employeeData, branchId: Number(branch.id) }; 
 
-export const updateEmployee = async (id: number, updatedData: Partial<Employee>): Promise<Employee | null> => {
-  const employeeIndex = employees.findIndex(employee => employee.id === id);
-  if (employeeIndex === -1) {
-    return null;
-  }
-  const updatedEmployee = { ...employees[employeeIndex], ...updatedData };
-  employees[employeeIndex] = updatedEmployee;
-  return updatedEmployee;
-};
+            // 3. Create the employee using the string branchId.
+            const newEmployee = await this.firebaseRepository.createEmployee(employeeDataWithBranchIdString);
 
-export const deleteEmployee = async (id: number): Promise<boolean> => {
-  const employeeIndex = employees.findIndex(employee => employee.id === id);
-  if (employeeIndex === -1) {
-    return false;
-  }
-  employees.splice(employeeIndex, 1);
-  return true;
-};
+            return newEmployee;
+        } catch (error) {
+            console.error("Error creating employee:", error);
+            throw error;
+        }
+    }
 
-// Get employees by branch ID
-export const getEmployeesByBranch = async (branchId: number): Promise<Employee[]> => {
-  return employees.filter(employee => employee.branchId === branchId);
-};
+    async getAllEmployees(): Promise<Employee[]> {
+        try {
+            return await this.firebaseRepository.getAllEmployees();
+        } catch (error) {
+            console.error("Error getting all employees:", error);
+            throw error;
+        }
+    }
 
-export const getEmployeesByDepartment = async (department: string): Promise<Employee[]> => {
-  return employees.filter(employee => employee.department === department);
-};
+    async getEmployeeById(id: string): Promise<Employee | undefined> { // ID is a string now
+        try {
+            return await this.firebaseRepository.getEmployeeById(id);
+        } catch (error) {
+            console.error("Error getting employee by ID:", error);
+            throw error;
+        }
+    }
 
+    async updateEmployee(id: string, updatedData: Partial<Employee>): Promise<Employee | null> { // ID is a string
+        try {
+            // 1. If branchId is being updated, fetch the branch and convert its ID
+            if (updatedData.branchId) {
+              const branch = await this.firebaseRepository.getBranchById(updatedData.branchId);
+              if (!branch) {
+                throw new Error("Branch not found");
+              }
+              updatedData.branchId = Number(branch.id);
+            }
+            return await this.firebaseRepository.updateEmployee(id, updatedData);
+        } catch (error) {
+            console.error("Error updating employee:", error);
+            throw error;
+        }
+    }
+
+    async deleteEmployee(id: string): Promise<boolean> { // ID is a string
+        try {
+            return await this.firebaseRepository.deleteEmployee(id);
+        } catch (error) {
+            console.error("Error deleting employee:", error);
+            throw error;
+        }
+    }
+
+    async getEmployeesByBranch(branchId: number): Promise<Employee[]> {
+      try {
+        const branch = await this.firebaseRepository.getBranchById(branchId);
+        if (!branch) {
+          throw new Error("Branch not found");
+        }
+        return await this.firebaseRepository.getAllEmployees().then(employees => employees.filter(employee => employee.branchId === branch.id));
+      } catch (error) {
+        console.error("Error getting employees by branch:", error);
+        throw error;
+      }
+    }
+
+    async getEmployeesByDepartment(department: string): Promise<Employee[]> {
+        try {
+            const employees = await this.firebaseRepository.getAllEmployees();
+            return employees.filter(employee => employee.department === department);
+        } catch (error) {
+            console.error("Error getting employees by department:", error);
+            throw error;
+        }
+    }
+}
