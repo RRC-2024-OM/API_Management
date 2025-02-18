@@ -42,17 +42,17 @@ export const errorHandler: ErrorRequestHandler = (err: any, req: Request, res: R
 
     if (err instanceof JoiValidationError) {
         const validationErrors = err.details.map(detail => ({ message: detail.message }));
-        res.status(400).json({ errors: validationErrors }); // Removed 'return'
+        res.status(400).json({ errors: validationErrors }); 
     } else if (err instanceof ValidationError) {
-        res.status(400).json({ errors: [{ message: err.message }] }); // Removed 'return'
+        res.status(400).json({ errors: [{ message: err.message }] }); 
     } else if (err instanceof AuthError) {
-        res.status(401).json({ errors: [{ message: err.message }] }); // Removed 'return'
+        res.status(401).json({ errors: [{ message: err.message }] }); 
     } else if (err instanceof AppError) {
-        res.status(err.status || 500).json({ errors: [{ message: err.message }] }); // Removed 'return'
+        res.status(err.status || 500).json({ errors: [{ message: err.message }] }); 
     } else if (err instanceof Error) {
-        res.status(500).json({ errors: [{ message: "Internal Server Error" }] }); // Removed 'return'
+        res.status(500).json({ errors: [{ message: "Internal Server Error" }] }); 
     } else {
-        res.status(500).json({ errors: [{ message: "An unexpected error occurred" }] }); // Removed 'return'
+        res.status(500).json({ errors: [{ message: "An unexpected error occurred" }] }); 
     }
 };
 

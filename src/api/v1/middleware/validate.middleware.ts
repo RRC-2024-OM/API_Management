@@ -1,4 +1,3 @@
-// src/middleware/validate.middleware.ts
 import { Request, Response, NextFunction } from "express";
 import { ObjectSchema } from "joi";
 import { MiddlewareFunction } from "../types/express";
