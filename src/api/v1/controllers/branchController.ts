@@ -17,7 +17,7 @@ export class BranchController {
     async createBranch(req: Request, res: Response, next: NextFunction): Promise<void> { 
         try {
             console.log("Controller: Request body:", req.body);
-            const branchData: Branch = req.body;
+            const branchData: Branch = { ...req.body, phone: req.body.phone.toString() };
 
             if (!branchData.name || !branchData.address || !branchData.phone) {
                 res.status(400).json({ message: "Name, address, and phone are required" }); 
