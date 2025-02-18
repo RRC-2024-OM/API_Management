@@ -4,6 +4,7 @@ import swaggerUi from "swagger-ui-express";
 import swaggerJsdoc from "swagger-jsdoc";
 import employeeRoutes from "./api/v1/routes/employeeRoutes";
 import branchRoutes from "./api/v1/routes/branchRoutes";
+import { errorHandler } from "./api/v1/middleware/errorHandler.middleware"
 
 // Initialize express app
 const app: Application = express();
@@ -66,6 +67,9 @@ app.use("/api/v1/branches", branchRoutes);
 app.get("/health", (req, res) => {
   res.status(200).send("Server is healthy");
 });
+
+// Error Handling Middleware
+app.use(errorHandler); // Register error handler AFTER routes
 
 // Start server (only if not in test environment)
 if (process.env.NODE_ENV !== "test") {

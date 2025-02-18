@@ -1,8 +1,15 @@
 import { Router } from "express";
-import { createEmployee, getAllEmployees, getEmployeeById, updateEmployee, deleteEmployee } from "../controllers/employeeController";
-import { getEmployeesByBranch, getEmployeesByDepartment } from "../services/employeeService";
+import { EmployeeController } from "../controllers/employeeController";
+import { validateRequest } from "../middleware/validate.middleware";
+import { createEmployeeSchema, updateEmployeeSchema } from "../schemas/employee.schema";
+import { EmployeeService } from "../services/employeeService"; 
+import { FirebaseRepository } from "../repositories/firesbaseRepository";
+
 
 const router = Router();
+const firebaseRepository = new FirebaseRepository();
+const employeeService = new EmployeeService(firebaseRepository); 
+const employeeController = new EmployeeController(employeeService); 
 
 /**
  * @swagger
@@ -37,7 +44,7 @@ const router = Router();
  *       500:
  *         description: Internal server error
  */
-router.post("/", createEmployee);
+router.post('/', validateRequest(createEmployeeSchema), employeeController.createEmployee.bind(employeeController));
 
 /**
  * @swagger
@@ -53,7 +60,7 @@ router.post("/", createEmployee);
  *       500:
  *         description: Internal server error
  */
-router.get("/", getAllEmployees);
+router.get("/", employeeController.getAllEmployees.bind(employeeController));
 
 /**
  * @swagger
@@ -76,7 +83,7 @@ router.get("/", getAllEmployees);
  *       404:
  *         description: Employee not found
  */
-router.get("/:id", getEmployeeById);
+router.get("/:id", employeeController.getEmployeeById.bind(employeeController));
 
 /**
  * @swagger
@@ -99,7 +106,7 @@ router.get("/:id", getEmployeeById);
  *         application/json:
  *           schema:
  *             type: object
- *             properties:
+ *             properties:  # List the updatable properties
  *               name:
  *                 type: string
  *               position:
@@ -118,7 +125,7 @@ router.get("/:id", getEmployeeById);
  *       404:
  *         description: Employee not found
  */
-router.put("/:id", updateEmployee);
+router.put('/:id', validateRequest(updateEmployeeSchema), employeeController.updateEmployee.bind(employeeController));
 
 /**
  * @swagger
@@ -141,7 +148,7 @@ router.put("/:id", updateEmployee);
  *       404:
  *         description: Employee not found
  */
-router.delete("/:id", deleteEmployee);
+router.delete("/:id", employeeController.deleteEmployee.bind(employeeController));
 
 /**
  * @swagger
@@ -164,38 +171,29 @@ router.delete("/:id", deleteEmployee);
  *       404:
  *         description: Branch not found
  */
-router.get("/branch/:branchId", async (req, res) => {
-  const branchId = parseInt(req.params.branchId);
-  const employees = await getEmployeesByBranch(branchId);
-  res.status(200).json(employees);
-});
-  
-  /**
-   * @swagger
-   * /api/v1/employees/department/{department}:
-   *   get:
-   *     summary: Get all employees for a department
-   *     description: Returns a list of employees that belong to a specific department.
-   *     tags:
-   *       - Employee Management
-   *     parameters:
-   *       - name: department
-   *         in: path
-   *         required: true
-   *         description: Department name
-   *         schema:
-   *           type: string
-   *     responses:
-   *       200:
-   *         description: List of employees
-   *       404:
-   *         description: Department not found
-   */
-  router.get("/department/:department", async (req, res) => {
-    const department = req.params.department;
-    const employees = await getEmployeesByDepartment(department);
-    res.status(200).json(employees);
-  });
-  
+router.get("/branch/:branchId", employeeController.getEmployeesByBranch.bind(employeeController));
+
+/**
+ * @swagger
+ * /api/v1/employees/department/{department}:
+ *   get:
+ *     summary: Get all employees for a department
+ *     description: Returns a list of employees that belong to a specific department.
+ *     tags:
+ *       - Employee Management
+ *     parameters:
+ *       - name: department
+ *         in: path
+ *         required: true
+ *         description: Department name
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: List of employees
+ *       404:
+ *         description: Department not found
+ */
+router.get("/department/:department", employeeController.getEmployeesByDepartment.bind(employeeController));
 
 export default router;
