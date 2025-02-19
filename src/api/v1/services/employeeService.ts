@@ -71,17 +71,32 @@ export class EmployeeService {
     }
 
     async getEmployeesByBranch(branchId: number): Promise<Employee[]> {
-      try {
-        const branch = await this.firebaseRepository.getBranchById(branchId);
-        if (!branch) {
-          throw new Error("Branch not found");
+        try {
+            console.log(`Fetching employees for branchId: ${branchId}`);
+    
+            const branch = await this.firebaseRepository.getBranchById(branchId);
+            if (!branch) {
+                console.error(`Branch not found for ID: ${branchId}`);
+                throw new Error("Branch not found");
+            }
+    
+            const employees = await this.firebaseRepository.getAllEmployees();
+            console.log("All employees from Firestore:", employees);
+    
+            // Check actual stored branch ID values
+            employees.forEach(emp => console.log(`Employee: ${emp.name}, Branch ID: ${emp.branchId}, Expected: ${branch.id}`));
+    
+            // Convert both values to numbers before filtering
+            const filteredEmployees = employees.filter(employee => Number(employee.branchId) === Number(branch.id));
+            console.log("Filtered employees:", filteredEmployees);
+    
+            return filteredEmployees;
+        } catch (error) {
+            console.error("Error getting employees by branch:", error);
+            throw error;
         }
-        return await this.firebaseRepository.getAllEmployees().then(employees => employees.filter(employee => employee.branchId === branch.id));
-      } catch (error) {
-        console.error("Error getting employees by branch:", error);
-        throw error;
-      }
     }
+    
 
     async getEmployeesByDepartment(department: string): Promise<Employee[]> {
         try {

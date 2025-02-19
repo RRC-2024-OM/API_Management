@@ -7,3 +7,14 @@ export interface Employee {
   phone: string;
   branchId: number;
 }
+
+
+export interface DepartmentEmployeeResponse {
+  department: string;
+  employees: Employee[];
+}
+
+export interface BranchEmployeeResponse {
+  branchId: number | string;
+  employees: Employee[];
+}
