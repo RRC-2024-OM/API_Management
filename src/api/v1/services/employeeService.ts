@@ -1,9 +1,8 @@
-// src/api/v1/services/employeeService.ts
 import { Employee } from "../models/employee";
 import { FirebaseRepository } from "../repositories/firesbaseRepository";
 
 export class EmployeeService {
-    constructor(private firebaseRepository: FirebaseRepository) {} // Inject the repository
+    constructor(private firebaseRepository: FirebaseRepository) {} 
 
     async createEmployee(employeeData: Omit<Employee, 'id'>): Promise<Employee> {
         try {
@@ -11,7 +10,7 @@ export class EmployeeService {
             const branch = await this.firebaseRepository.getBranchById(employeeData.branchId);
 
             if (!branch) {
-                throw new Error("Branch not found"); // Or handle it as a 400
+                throw new Error("Branch not found"); 
             }
 
             // 2. Now, before creating the employee in Firestore, convert the branch ID to a string.
@@ -36,7 +35,7 @@ export class EmployeeService {
         }
     }
 
-    async getEmployeeById(id: string): Promise<Employee | undefined> { // ID is a string now
+    async getEmployeeById(id: string): Promise<Employee | undefined> { 
         try {
             return await this.firebaseRepository.getEmployeeById(id);
         } catch (error) {
@@ -45,7 +44,7 @@ export class EmployeeService {
         }
     }
 
-    async updateEmployee(id: string, updatedData: Partial<Employee>): Promise<Employee | null> { // ID is a string
+    async updateEmployee(id: string, updatedData: Partial<Employee>): Promise<Employee | null> { 
         try {
             // 1. If branchId is being updated, fetch the branch and convert its ID
             if (updatedData.branchId) {
@@ -62,7 +61,7 @@ export class EmployeeService {
         }
     }
 
-    async deleteEmployee(id: string): Promise<boolean> { // ID is a string
+    async deleteEmployee(id: string): Promise<boolean> { 
         try {
             return await this.firebaseRepository.deleteEmployee(id);
         } catch (error) {
@@ -72,17 +71,32 @@ export class EmployeeService {
     }
 
     async getEmployeesByBranch(branchId: number): Promise<Employee[]> {
-      try {
-        const branch = await this.firebaseRepository.getBranchById(branchId);
-        if (!branch) {
-          throw new Error("Branch not found");
+        try {
+            console.log(`Fetching employees for branchId: ${branchId}`);
+    
+            const branch = await this.firebaseRepository.getBranchById(branchId);
+            if (!branch) {
+                console.error(`Branch not found for ID: ${branchId}`);
+                throw new Error("Branch not found");
+            }
+    
+            const employees = await this.firebaseRepository.getAllEmployees();
+            console.log("All employees from Firestore:", employees);
+    
+            // Check actual stored branch ID values
+            employees.forEach(emp => console.log(`Employee: ${emp.name}, Branch ID: ${emp.branchId}, Expected: ${branch.id}`));
+    
+            // Convert both values to numbers before filtering
+            const filteredEmployees = employees.filter(employee => Number(employee.branchId) === Number(branch.id));
+            console.log("Filtered employees:", filteredEmployees);
+    
+            return filteredEmployees;
+        } catch (error) {
+            console.error("Error getting employees by branch:", error);
+            throw error;
         }
-        return await this.firebaseRepository.getAllEmployees().then(employees => employees.filter(employee => employee.branchId === branch.id));
-      } catch (error) {
-        console.error("Error getting employees by branch:", error);
-        throw error;
-      }
     }
+    
 
     async getEmployeesByDepartment(department: string): Promise<Employee[]> {
         try {

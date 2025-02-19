@@ -1,4 +1,3 @@
-// src/schemas/employee.schema.ts
 import * as Joi from 'joi';
 
 export const createEmployeeSchema: Joi.ObjectSchema = Joi.object({
