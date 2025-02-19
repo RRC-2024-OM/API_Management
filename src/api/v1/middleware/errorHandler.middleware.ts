@@ -2,7 +2,7 @@ import { Request, Response, NextFunction, ErrorRequestHandler } from 'express';
 import { ValidationError as JoiValidationError } from 'joi';
 
 // ------------------------------------------------------------------
-// Custom Error Classes (Defined within this file for simplicity)
+// Custom Error Classes 
 // ------------------------------------------------------------------
 
 interface CustomError extends Error {
