@@ -1,13 +1,31 @@
-import { initializeApp, cert, ServiceAccount } from "firebase-admin/app";
+import { initializeApp, cert, ServiceAccount, getApps, App } from "firebase-admin/app";
 import { getFirestore, Firestore } from "firebase-admin/firestore";
-import * as serviceAccount from "../api-management-318bc-firebase-adminsdk-fbsvc-09ead3cae2.json"
 
-// Initialize the Firebase app with the service account credentials
-initializeApp({
-    credential: cert(serviceAccount as ServiceAccount),
-});
+let db: Firestore;
 
-// Get a reference to the Firestore service
-const db: Firestore = getFirestore();
+// Initialize Firebase Admin SDK if not already initialized
+if (!getApps().length) {
+  const serviceAccount: ServiceAccount = {
+    type: process.env.FIREBASE_TYPE,
+    project_id: process.env.FIREBASE_PROJECT_ID,
+    private_key_id: process.env.FIREBASE_PRIVATE_KEY_ID,
+    private_key: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+    client_email: process.env.FIREBASE_CLIENT_EMAIL,
+    client_id: process.env.FIREBASE_CLIENT_ID,
+    auth_uri: process.env.FIREBASE_AUTH_URI,
+    token_uri: process.env.FIREBASE_TOKEN_URI,
+    auth_provider_x509_cert_url: process.env.FIREBASE_AUTH_PROVIDER_X509_CERT_URL,
+    client_x509_cert_url: process.env.FIREBASE_CLIENT_X509_CERT_URL,
+    universe_domain: process.env.FIREBASE_UNIVERSE_DOMAIN,
+  } as ServiceAccount;
+
+  initializeApp({
+    credential: cert(serviceAccount),
+    projectId: process.env.FIREBASE_PROJECT_ID,
+  });
+  db = getFirestore();
+} else {
+  db = getFirestore(getApps()[0]); 
+}
 
 export { db };

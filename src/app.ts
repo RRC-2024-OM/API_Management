@@ -1,3 +1,6 @@
+import dotenv from 'dotenv'
+dotenv.config();
+
 import express, { Application } from "express";
 import morgan from "morgan";
 import swaggerUi from "swagger-ui-express";
@@ -5,6 +8,7 @@ import swaggerJsdoc from "swagger-jsdoc";
 import employeeRoutes from "./api/v1/routes/employeeRoutes";
 import branchRoutes from "./api/v1/routes/branchRoutes";
 import { errorHandler } from "./api/v1/middleware/errorHandler.middleware"
+
 
 // Initialize express app
 const app: Application = express();
