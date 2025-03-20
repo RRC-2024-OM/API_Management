@@ -116,6 +116,10 @@ Copy
   "id": "HTTPQW/kingFMO-TRALL"
 }
 
+![image](https://github.com/user-attachments/assets/7e4c8c7b-3976-4b07-9b61-bc148f783643)
+
+
+
 ```
 
 #### Get Employee by ID
