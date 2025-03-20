@@ -1,4 +1,4 @@
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
 dotenv.config();
 
 import express, { Application } from "express";
@@ -7,10 +7,9 @@ import swaggerUi from "swagger-ui-express";
 import swaggerJsdoc from "swagger-jsdoc";
 import employeeRoutes from "./api/v1/routes/employeeRoutes";
 import branchRoutes from "./api/v1/routes/branchRoutes";
-import { errorHandler } from "./api/v1/middleware/errorHandler.middleware"
+import { errorHandler } from "./api/v1/middleware/errorHandler.middleware";
 import helmet from "helmet";
 import cors from "cors";
-
 
 // Initialize express app
 const app: Application = express();
@@ -38,23 +37,79 @@ const options = {
       version: "1.0.0",
       description: "API for managing employees and branches in the company",
     },
-    servers: [{ url: "http://localhost:3000" }],
+    servers: [{ url: `http://localhost:${process.env.PORT || 3000}` }],
     tags: [
-      {
-        name: "Server Health Check",
-        description: "API to check the server's health status",
-      },
-      {
-        name: "Employee Management",
-        description: "Operations related to managing employees",
-      },
-      {
-        name: "Branch Management",
-        description: "Operations related to managing branches",
-      },
+      { name: "Server Health Check", description: "API to check the server's health status" },
+      { name: "Employee Management", description: "Operations related to managing employees" },
+      { name: "Branch Management", description: "Operations related to managing branches" },
     ],
+    components: {
+      schemas: {
+        Employee: {
+          type: 'object',
+          properties: {
+            id: { type: 'string', description: 'Employee ID' },
+            name: { type: 'string' },
+            position: { type: 'string' },
+            department: { type: 'string' },
+            email: { type: 'string', format: 'email' },
+            phone: { type: 'string' },
+            branchId: { type: 'string' },
+          },
+        },
+        NewEmployee: {
+          type: 'object',
+          properties: {
+            name: { type: 'string', required: true },
+            position: { type: 'string', required: true },
+            department: { type: 'string', required: true },
+            email: { type: 'string', format: 'email', required: true },
+            phone: { type: 'string', required: true },
+            branchId: { type: 'string', required: true },
+          },
+          required: ['name', 'position', 'department', 'email', 'phone', 'branchId'],
+        },
+        UpdateEmployee: {
+          type: 'object',
+          properties: {
+            name: { type: 'string' },
+            position: { type: 'string' },
+            department: { type: 'string' },
+            email: { type: 'string', format: 'email' },
+            phone: { type: 'string' },
+            branchId: { type: 'string' },
+          },
+        },
+        Branch: {
+          type: 'object',
+          properties: {
+            id: { type: 'string', description: 'Branch ID' },
+            name: { type: 'string' },
+            address: { type: 'string' },
+            phone: { type: 'string' },
+          },
+        },
+        NewBranch: {
+          type: 'object',
+          properties: {
+            name: { type: 'string', required: true },
+            address: { type: 'string', required: true },
+            phone: { type: 'string' },
+          },
+          required: ['name', 'address'],
+        },
+        UpdateBranch: {
+          type: 'object',
+          properties: {
+            name: { type: 'string' },
+            address: { type: 'string' },
+            phone: { type: 'string' },
+          },
+        },
+      },
+    },
   },
-  apis: ["./src/api/v1/routes/*.ts", "./src/app.ts"], 
+  apis: ["./src/api/v1/routes/*.ts", "./src/app.ts"],
 };
 
 const swaggerSpec = swaggerJsdoc(options);
