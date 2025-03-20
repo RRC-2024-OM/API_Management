@@ -9,6 +9,7 @@ import employeeRoutes from "./api/v1/routes/employeeRoutes";
 import branchRoutes from "./api/v1/routes/branchRoutes";
 import { errorHandler } from "./api/v1/middleware/errorHandler.middleware"
 import helmet from "helmet";
+import cors from "cors";
 
 
 // Initialize express app
@@ -18,6 +19,15 @@ const app: Application = express();
 app.use(express.json());
 app.use(morgan("combined"));
 app.use(helmet());
+
+// CORS Configuration for localhost development
+const corsOptions = {
+  origin: ['http://localhost:3000', 'http://localhost:3001'],
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  optionsSuccessStatus: 204,
+};
+app.use(cors(corsOptions));
 
 // Swagger setup
 const options = {
