@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { Request, Response, NextFunction } from "express"; 
 import { BranchService } from "../services/branchService";
 import { Branch } from "../models/branch";

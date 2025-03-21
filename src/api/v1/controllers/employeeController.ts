@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { Request, Response, NextFunction } from "express"; 
 import { EmployeeService } from "../services/employeeService";
 

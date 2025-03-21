@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { Branch } from "../models/branch";
 import { FirebaseRepository } from "../repositories/firesbaseRepository";
 

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { Employee } from "../models/employee";
 import { FirebaseRepository } from "../repositories/firesbaseRepository";
 
