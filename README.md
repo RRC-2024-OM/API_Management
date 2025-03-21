@@ -115,7 +115,6 @@ Copy
   "branchId": 9,
   "id": "HTTPQW/kingFMO-TRALL"
 }
-
 ```
 
 #### Get Employee by ID
